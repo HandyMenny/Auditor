@@ -210,8 +210,8 @@ class AttestationProtocol {
             "26BCBD580FDA884F266FF035C569FCED0DA454A9E5C4EEDBBE1841491C55F0AB";
     private static final int OS_VERSION_MINIMUM = 80000;
     private static final int OS_PATCH_LEVEL_MINIMUM = 201801;
-    private static final int VENDOR_PATCH_LEVEL_MINIMUM = 20180105;
-    private static final int BOOT_PATCH_LEVEL_MINIMUM = 20180105;
+    private static final int VENDOR_PATCH_LEVEL_MINIMUM = 201809;
+    private static final int BOOT_PATCH_LEVEL_MINIMUM = 201809;
 
     // Split displayed fingerprint into groups of 4 characters
     private static final int FINGERPRINT_SPLIT_INTERVAL = 4;
@@ -239,11 +239,13 @@ class AttestationProtocol {
                     new DeviceInfo(R.string.device_pixel_2, 2, 3, true, true))
             .put("674E69685D8D0E49D25CB192B76BA69AA0E1AF5BE0CBF925BD6EC61704662A8E",
                     new DeviceInfo(R.string.device_pixel_2_xl, 2, 3, true, true))
+            .put("4F308FF86A7D10FC5B5D0B7852DD2727103E71E6DE6E0772AC01AD25CA38C076",
+                    new DeviceInfo(R.string.device_pixel_3, 3, 3, false /* uses new API */, true))
             .build();
     private static final ImmutableMap<String, DeviceInfo> fingerprintsStock = ImmutableMap
             .<String, DeviceInfo>builder()
             .put("5341E6B2646979A70E57653007A1F310169421EC9BDD9F1A5648F75ADE005AF1",
-                    new DeviceInfo(R.string.device_bkl_l04, 2, 3, false, true))
+                    new DeviceInfo(R.string.device_huawei, 2, 3, false, true))
             .put("DFC2920C81E136FDD2A510478FDA137B262DC51D449EDD7D0BDB554745725CFE",
                     new DeviceInfo(R.string.device_nokia, 2, 3, true, true))
             .put("6101853DFF451FAE5B137DF914D5E6C15C659337F2C405AC50B513A159071958",
@@ -252,6 +254,8 @@ class AttestationProtocol {
                     new DeviceInfo(R.string.device_pixel_2, 2, 3, true, true))
             .put("171616EAEF26009FC46DC6D89F3D24217E926C81A67CE65D2E3A9DC27040C7AB",
                     new DeviceInfo(R.string.device_pixel_2_xl, 2, 3, true, true))
+            .put("B799391AFAE3B35522D1EDC5C70A3746B097BDD1CABD59F72BB049705C7A03EF",
+                    new DeviceInfo(R.string.device_pixel_3, 3, 3, false /* uses new API */, true))
             .put("33D9484FD512E610BCF00C502827F3D55A415088F276C6506657215E622FA770",
                     new DeviceInfo(R.string.device_sm_g960f, 1, 2, false, false))
             .put("266869F7CF2FB56008EFC4BE8946C8F84190577F9CA688F59C72DD585E696488",
@@ -260,12 +264,24 @@ class AttestationProtocol {
                     new DeviceInfo(R.string.device_sm_g965f, 1, 2, false, false))
             .put("A4A544C2CFBAEAA88C12360C2E4B44C29722FC8DBB81392A6C1FAEDB7BF63010",
                     new DeviceInfo(R.string.device_sm_g965_msm, 1, 2, false, false))
+            .put("173ACFA8AE9EDE7BBD998F45A49231F3A4BDDF0779345732E309446B46B5641B",
+                    new DeviceInfo(R.string.device_sm_n960u, 1, 2, false, false))
             .put("4285AD64745CC79B4499817F264DC16BF2AF5163AF6C328964F39E61EC84693E",
                     new DeviceInfo(R.string.device_sony_xperia_xa2, 2, 3, true, true))
             .put("54A9F21E9CFAD3A2D028517EF333A658302417DB7FB75E0A109A019646CC5F39",
                     new DeviceInfo(R.string.device_sony_xperia_xz1, 2, 3, true, true))
             .put("BC3B5E121974113939B8A2FE758F9B923F1D195F038D2FD1C04929F886E83BB5",
                     new DeviceInfo(R.string.device_sony_xperia_xz2, 2, 3, false, true))
+            .put("94B8B4E3260B4BF8211A02CF2F3DE257A127CFFB2E4047D5580A752A5E253DE0",
+                    new DeviceInfo(R.string.device_sony_xperia_xz2_compact, 2, 3, true, true))
+            .put("728800FEBB119ADD74519618AFEDB715E1C39FE08A4DE37D249BF54ACF1CE00F",
+                    new DeviceInfo(R.string.device_blackberry_key2, 2, 3, true, true))
+            .put("1194659B40EA291245E54A3C4EC4AA5B7077BD244D65C7DD8C0A2DBB9DB1FB35",
+                    new DeviceInfo(R.string.device_bq_aquaris_x2_pro, 2, 3, true, false))
+            .put("A9C6758D509600D0EB94FA8D2BF6EE7A6A6097F0CCEF94A755DDE065AA1AA1B0",
+                    new DeviceInfo(R.string.device_xiaomi_mi_a2, 2, 3, true, false))
+            .put("6FA710B639848C9D47378937A1AFB1B6A52DDA738BEB6657E2AE70A15B40541A",
+                    new DeviceInfo(R.string.device_xiaomi_mi_a2_lite, 2, 3, true, false))
             .build();
 
     private static byte[] getChallengeIndex(final Context context) {
@@ -465,8 +481,8 @@ class AttestationProtocol {
             throw new GeneralSecurityException("keymaster version below " + device.keymasterVersion);
         }
 
-        return new Verified(device.name, verifiedBootKey, osVersion, osPatchLevel, bootPatchLevel,
-                vendorPatchLevel, appVersion, stock, device.perUserEncryption);
+        return new Verified(device.name, verifiedBootKey, osVersion, osPatchLevel, vendorPatchLevel,
+                bootPatchLevel, appVersion, stock, device.perUserEncryption);
     }
 
     private static void verifyCertificateSignatures(Certificate[] certChain)
@@ -521,15 +537,13 @@ class AttestationProtocol {
         final String vendorPatchLevel = Integer.toString(verified.vendorPatchLevel);
         if (verified.vendorPatchLevel != 0) {
             builder.append(context.getString(R.string.vendor_patch_level,
-                    vendorPatchLevel.substring(0, 4) + "-" + vendorPatchLevel.substring(4, 6) + "-" +
-                    vendorPatchLevel.substring(6, 8)));
+                    vendorPatchLevel.substring(0, 4) + "-" + vendorPatchLevel.substring(4, 6)));
         }
 
         final String bootPatchLevel = Integer.toString(verified.bootPatchLevel);
         if (verified.bootPatchLevel != 0) {
             builder.append(context.getString(R.string.boot_patch_level,
-                    bootPatchLevel.substring(0, 4) + "-" + bootPatchLevel.substring(4, 6) + "-" +
-                    bootPatchLevel.substring(6, 8)));
+                    bootPatchLevel.substring(0, 4) + "-" + bootPatchLevel.substring(4, 6)));
         }
 
         final StringBuilder splitFingerprint = new StringBuilder();
